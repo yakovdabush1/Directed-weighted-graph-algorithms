@@ -24,7 +24,7 @@ public interface dw_graph_algorithms {
      * Return the underlying graph of which this class works.
      * @return
      */
-    public directed_weighted_graph getD();
+    public directed_weighted_graph getGraph();
     /**
      * Compute a deep copy of this weighted graph.
      * @return

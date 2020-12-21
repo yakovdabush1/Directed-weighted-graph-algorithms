@@ -1,7 +1,10 @@
 package api;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Objects;
 
 public class DWGraph_DS implements directed_weighted_graph, Serializable {
 
@@ -14,6 +17,9 @@ public class DWGraph_DS implements directed_weighted_graph, Serializable {
     public DWGraph_DS(){
         this.graphMap = new HashMap<Integer, node_data>();
         this.Ni = new HashMap<Integer,HashMap<Integer,edge_data>>();
+
+        EdgeCount = 0;
+        MC = 0;
     }
 
 
@@ -34,7 +40,7 @@ public class DWGraph_DS implements directed_weighted_graph, Serializable {
 
     @Override
     public edge_data getEdge(int src, int dest) {
-        if(hasEdge(src,dest)){
+        if(hasEdge(src,dest) && src != dest){
             return Ni.get(src).get(dest);
         }
         return null;
@@ -47,28 +53,23 @@ public class DWGraph_DS implements directed_weighted_graph, Serializable {
             MC++;
 
             graphMap.put(n.getKey(), n);
-            Ni.put(n.getKey(),new HashMap<Integer, edge_data>());
+            Ni.put(n.getKey(), new HashMap<Integer, edge_data>());
         }
     }
 
     @Override
     public void connect(int src, int dest, double w) {
-        if(graphMap.containsKey(src) && graphMap.containsKey(dest) && src != dest) {
+        if(graphMap.containsKey(src) && graphMap.containsKey(dest) && src != dest && w >= 0) {
 
-            MC++;
-
-            if (!Ni.containsKey(src)) {
-                Ni.put(src, new HashMap<Integer, edge_data>());
-            }
-
-            EdgeData newEdge = new EdgeData(src, dest, w);
+//            if (!Ni.containsKey(src)) {
+//                Ni.put(src, new HashMap<Integer, edge_data>());
+//            }
 
             if (!hasEdge(src, dest)) {
+                EdgeData newEdge = new EdgeData(src, dest, w);
                 Ni.get(src).put(dest, newEdge);
+                MC++;
                 EdgeCount++;
-            }
-            else{
-                Ni.get(src).replace(dest,newEdge);
             }
         }
     }
@@ -81,9 +82,7 @@ public class DWGraph_DS implements directed_weighted_graph, Serializable {
     @Override
     public Collection<edge_data> getE(int node_id) {
         if(graphMap.containsKey(node_id)) {
-            if (Ni.get(node_id).keySet() != null) {
-                return Ni.get(node_id).values();
-            }
+            return Ni.get(node_id).values();
         }
         return null;
     }
@@ -114,16 +113,14 @@ public class DWGraph_DS implements directed_weighted_graph, Serializable {
 
     @Override
     public edge_data removeEdge(int src, int dest) {
-        if(hasEdge(src,dest)){
+        if(hasEdge(src,dest) && src != dest){
 
-            edge_data edge = Ni.get(src).get(dest);
+//            edge_data edge = Ni.get(src).get(dest);
 
             EdgeCount--;
             MC++;
 
-            Ni.get(src).remove(dest);
-
-            return edge;
+            return Ni.get(src).remove(dest);
         }
         return null;
     }
@@ -146,4 +143,33 @@ public class DWGraph_DS implements directed_weighted_graph, Serializable {
     public boolean hasNode(int dest) {
         return graphMap.containsKey(dest);
     }
+
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(graphMap, Ni, EdgeCount, MC);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (obj == null) {
+            return false;
+        }
+
+        if (!(obj instanceof DWGraph_DS)) {
+            return false;
+        }
+
+        DWGraph_DS other = (DWGraph_DS) obj;
+
+        return EdgeCount == other.edgeSize()
+                && MC == other.getMC()
+                && Objects.equals(graphMap, other.graphMap)
+                && Objects.equals(Ni, other.Ni);
+    }
+
 }

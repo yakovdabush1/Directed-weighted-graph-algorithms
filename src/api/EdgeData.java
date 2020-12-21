@@ -9,19 +9,21 @@ public class EdgeData implements edge_data, Serializable {
      double w;
      String info;
      Color tag;
-    node_data source;
-    node_data destination;
+
+//    node_data source;
+//    node_data destination;
+
    public EdgeData(int src,int dest,double w){
        this.src = src;
        this.dest = dest;
        this.w = w;
    }
+
     public EdgeData(node_data source, node_data destination, double w){
-        this.source = source;
-        this.destination = destination;
+
         this.w = w;
-        this.source = source;
-        this.destination = destination;
+//        this.source = source;
+//        this.destination = destination;
         this.info = "";
         this.tag = Color.RED;
     }
@@ -30,8 +32,10 @@ public class EdgeData implements edge_data, Serializable {
         src = edge.getSrc();
         dest = edge.getDest();
         w = edge.getWeight();
-        source = edge.source;
-        destination =edge.getDestination();
+
+//        source = edge.source;
+//        destination =edge.getDestination();
+
         info = edge.getInfo();
         tag = new Color(edge.getTag());
     }
@@ -42,7 +46,7 @@ public class EdgeData implements edge_data, Serializable {
      */
 
     public int getSrc(){
-        return source.getKey();
+        return src;
     }
 
     /**
@@ -50,7 +54,7 @@ public class EdgeData implements edge_data, Serializable {
      * @return
      */
     public int getDest(){
-        return destination.getKey();
+        return dest;
     }
     /**
      * @return the weight of this edge (positive value).
@@ -88,12 +92,17 @@ public class EdgeData implements edge_data, Serializable {
     public void setTag(int t){
         tag = new Color (t);
     }
-    public node_data getSource() {
-        return source;
-    }
-    public node_data getDestination() {
-        return destination;
-    }
+
+//    public node_data getSource() {
+//        return source;
+//    }
+//    public node_data getDestination() {
+//        return destination;
+//    }
 
 
+    @Override
+    public String toString() {
+        return "";
+    }
 }

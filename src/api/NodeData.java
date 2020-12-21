@@ -1,6 +1,8 @@
 package api;
 
-public class NodeData implements node_data{
+import org.jetbrains.annotations.NotNull;
+
+public class NodeData implements node_data, Comparable<node_data>{
 
     private int key, tag;
     private String info;
@@ -60,5 +62,20 @@ public class NodeData implements node_data{
     @Override
     public void setTag(int t) {
         tag = t;
+    }
+
+    @Override
+    public int compareTo(@NotNull node_data o) {
+
+        double w1 = this.getWeight();
+        double w2 = o.getWeight();
+
+        return Double.compare(w1, w2);
+
+    }
+
+    @Override
+    public String toString() {
+        return "";
     }
 }
