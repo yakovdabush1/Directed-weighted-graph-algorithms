@@ -8,8 +8,13 @@ import gameClient.util.Point3D;
 import gameClient.util.Range;
 import gameClient.util.Range2D;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.ImageObserver;
+import java.awt.image.ImageProducer;
+import java.io.File;
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
@@ -21,13 +26,16 @@ import java.util.List;
  *
  */
 public class MyFrame extends JFrame{
+
 	private int _ind;
 	private Arena _ar;
 	private gameClient.util.Range2Range _w2f;
+
 	MyFrame(String a) {
 		super(a);
 		int _ind = 0;
 	}
+
 	public void update(Arena ar) {
 		this._ar = ar;
 		updateFrame();
@@ -40,17 +48,32 @@ public class MyFrame extends JFrame{
 		directed_weighted_graph g = _ar.getGraph();
 		_w2f = Arena.w2f(g,frame);
 	}
+
 	public void paint(Graphics g) {
+
 		int w = this.getWidth();
 		int h = this.getHeight();
+
 		g.clearRect(0, 0, w, h);
-	//	updateFrame();
+
+		updateFrame();
+
+//		try {
+//			boolean b = g.drawImage(ImageIO.read(new File("Images/arena.png")),0,0, w, h, this);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+
 		drawPokemons(g);
+
 		drawGraph(g);
+
 		drawAgants(g);
+
 		drawInfo(g);
 		
 	}
+
 	private void drawInfo(Graphics g) {
 		List<String> str = _ar.get_info();
 		String dt = "none";
@@ -59,6 +82,7 @@ public class MyFrame extends JFrame{
 		}
 		
 	}
+
 	private void drawGraph(Graphics g) {
 		directed_weighted_graph gg = _ar.getGraph();
 		Iterator<node_data> iter = gg.getV().iterator();
@@ -77,11 +101,14 @@ public class MyFrame extends JFrame{
 	private void drawPokemons(Graphics g) {
 		List<CL_Pokemon> fs = _ar.getPokemons();
 		if(fs!=null) {
-		Iterator<CL_Pokemon> itr = fs.iterator();
+//		Iterator<CL_Pokemon> itr = fs.iterator();
 		
-		while(itr.hasNext()) {
-			
-			CL_Pokemon f = itr.next();
+//		while(itr.hasNext()) {
+			int s = fs.size();
+			for(int i = 0 ; i < s; i++) {
+				System.out.println("size: " + fs.size());
+			CL_Pokemon f = fs.get(i);
+
 			Point3D c = f.getLocation();
 			int r=10;
 			g.setColor(Color.green);
@@ -89,8 +116,29 @@ public class MyFrame extends JFrame{
 			if(c!=null) {
 
 				geo_location fp = this._w2f.world2frame(c);
+
+//				*************************************** Pokemon Image
+
 				g.fillOval((int)fp.x()-r, (int)fp.y()-r, 2*r, 2*r);
-			//	g.drawString(""+n.getKey(), fp.ix(), fp.iy()-4*r);
+//				g.drawImage(Toolkit.getDefaultToolkit().createImage("Images/Pica.gif"),(int)fp.x()-r, (int)fp.y()-r, 4*r, 4*r, this);
+
+////***************************************************************
+////				geo_location fp = this.range.world2frame(agent_location);
+//				g.drawImage(Toolkit.getDefaultToolkit().createImage("Images/Pica.gif"), (int) fp.x() - 30, (int) fp.y() - 30, 5 * r, 5 * r, this);
+////				g.drawImage(blur, (int) fp.x() - 75, (int) fp.y() - 70, 140, 35, this);
+//				g.setColor(Color.RED);
+//				g.setFont(new Font("Segoe UI", Font.BOLD, 25));
+//				g.drawString("Ash", (int) fp.x() - 70, (int) fp.y() - 44);
+//				g.setColor(Color.WHITE);
+//				g.setFont(new Font("Segoe UI", Font.BOLD, 15));
+//				g.drawString("Points:", (int) fp.x() - 20, (int) fp.y() - 7 * r);
+////				g.drawString("Speed:" + (int) rs.get(i).getSpeed(), (int) fp.x() - 20, (int) fp.y() - 5 * r);
+//				g.setFont(new Font("Segoe UI", Font.BOLD, 20));
+////***************************************************************
+
+
+				g.setColor(Color.BLACK);
+				g.drawString("value: " + f.getValue(), (int)fp.x(), (int)fp.y()-4*r);
 				
 			}
 		}

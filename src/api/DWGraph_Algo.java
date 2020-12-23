@@ -1,4 +1,9 @@
 package api;
+//import com.google.gson.*;
+//
+//import java.awt.*;
+//import java.io.*;
+//import java.util.*;
 
 import gameClient.util.Point3D;
 import org.json.JSONArray;
@@ -150,9 +155,44 @@ public class DWGraph_Algo implements dw_graph_algorithms {
         return this.distance.get(dest) == Double.MAX_VALUE ? -1 : this.distance.get(dest);
     }
 
+//    @Override
+//    public double shortestPathDist(int src, int dest) {
+//        clear();
+//        Queue <node_data> pq = new LinkedList<node_data>();
+//        node_data source = graph.getNode(src);
+//        source.setWeight(0);
+//        pq.add(source)
+//        while(source != null) {
+//            //mark visit
+//            source.setTag(1);
+//            //array list of edges getting out from source
+//            Collection<edge_data> eSrc = graph.getE(source.getKey());
+//            //checking every node weight and change it if needed
+//            for (edge_data e : eSrc) {
+//                node_data neighbor = graph.getNode(e.getDest());
+//                if (neighbor.getWeight() > source.getWeight() + e.getWeight()) {
+//                    neighbor.setWeight(source.getWeight() + e.getWeight());
+//                    neighbor.setInfo("" + source.getKey());
+//                    pq.add(neighbor);
+//                }
+//            }
+//            //remove first from queue
+//            pq.poll();
+//            source = pq.peek();
+//
+//        }
+//        if (graph.getNode(dest).getWeight() == Double.MAX_VALUE) {
+//            System.out.println("there is no path between "+ src + " and " + dest);
+//            return Double.POSITIVE_INFINITY;
+//        }
+//        else {
+//            return graph.getNode(dest).getWeight();
+//        }
+//    }
 
 
 
+    //use shortestpathDist
     @Override
     public List<node_data> shortestPath(int src, int dest) {
         // TODO Auto-generated method stub
@@ -194,7 +234,7 @@ public class DWGraph_Algo implements dw_graph_algorithms {
 
             JSONObject node = new JSONObject();
 
-            node.put("pos", vertex.getLocation());
+            node.put("pos", vertex.getLocation().toString());
             node.put("id", vertex.getKey());
 
             nodes.put(node);

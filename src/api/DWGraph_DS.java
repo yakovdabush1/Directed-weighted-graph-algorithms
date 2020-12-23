@@ -1,15 +1,19 @@
 package api;
 
+import org.junit.platform.engine.support.hierarchical.Node;
+
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Objects;
+import java.util.*;
 
-public class DWGraph_DS implements directed_weighted_graph, Serializable {
+public class DWGraph_DS implements directed_weighted_graph {
 
-    private HashMap<Integer,HashMap<Integer,edge_data>> Ni;
-    private HashMap<Integer,node_data> graphMap;
+//    /**
+//     *
+//     */
+//    private static final long serialVersionUID = 1L;
+
+    private HashMap<Integer, HashMap<Integer,edge_data>> Ni;
+    private HashMap<Integer, node_data> graphMap;
 
     private int EdgeCount;
     private int MC;
@@ -32,10 +36,7 @@ public class DWGraph_DS implements directed_weighted_graph, Serializable {
     }
 
     private boolean hasEdge(int node1, int node2) {
-        if(Ni.get(node1).containsKey(node2)){
-            return true;
-        }
-        return false;
+        return Ni.get(node1).containsKey(node2);
     }
 
     @Override
@@ -60,10 +61,6 @@ public class DWGraph_DS implements directed_weighted_graph, Serializable {
     @Override
     public void connect(int src, int dest, double w) {
         if(graphMap.containsKey(src) && graphMap.containsKey(dest) && src != dest && w >= 0) {
-
-//            if (!Ni.containsKey(src)) {
-//                Ni.put(src, new HashMap<Integer, edge_data>());
-//            }
 
             if (!hasEdge(src, dest)) {
                 EdgeData newEdge = new EdgeData(src, dest, w);
@@ -91,29 +88,26 @@ public class DWGraph_DS implements directed_weighted_graph, Serializable {
     public node_data removeNode(int key) {
         if(graphMap.containsKey(key)){
 
-            MC++;
-
-            node_data removedNode = this.getNode(key);
             if(Ni.containsKey(key)) {
+
                 Iterator<node_data> iterator = getV().iterator();
                 while ((iterator.hasNext())) {
                     int destKey = iterator.next().getKey();
                     removeEdge(key, destKey);
-                    removeEdge(iterator.next().getKey(), key);
+                    removeEdge(destKey, key);
                 }
                 Ni.remove(key);
             }
 
-            graphMap.remove(key);
-
-            return removedNode;
+            return graphMap.remove(key);
         }
+
         return null;
     }
 
     @Override
     public edge_data removeEdge(int src, int dest) {
-        if(hasEdge(src,dest) && src != dest){
+        if(this.Ni.get(src).containsKey(dest) && hasEdge(src,dest) && src != dest){
 
 //            edge_data edge = Ni.get(src).get(dest);
 
@@ -127,7 +121,7 @@ public class DWGraph_DS implements directed_weighted_graph, Serializable {
 
     @Override
     public int nodeSize() {
-        return graphMap.keySet().size();
+        return graphMap.size();
     }
 
     @Override
@@ -140,36 +134,23 @@ public class DWGraph_DS implements directed_weighted_graph, Serializable {
         return MC;
     }
 
-    public boolean hasNode(int dest) {
-        return graphMap.containsKey(dest);
-    }
-
-
     @Override
-    public int hashCode() {
-        return Objects.hash(graphMap, Ni, EdgeCount, MC);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DWGraph_DS that = (DWGraph_DS) o;
+        boolean flag = false;
+        if (graphMap.size() == that.nodeSize() &&
+                EdgeCount == that.EdgeCount) {
+            flag = true;
+            for (int src : graphMap.keySet())
+                for (Integer dest : Ni.get(src).keySet())
+                    if (((DWGraph_DS) o).getEdge(src, dest).getSrc() != src || ((DWGraph_DS) o).getEdge(src, dest).getDest() != dest)
+                        flag = false;
         }
 
-        if (obj == null) {
-            return false;
-        }
+        return flag;
 
-        if (!(obj instanceof DWGraph_DS)) {
-            return false;
-        }
-
-        DWGraph_DS other = (DWGraph_DS) obj;
-
-        return EdgeCount == other.edgeSize()
-                && MC == other.getMC()
-                && Objects.equals(graphMap, other.graphMap)
-                && Objects.equals(Ni, other.Ni);
     }
 
 }

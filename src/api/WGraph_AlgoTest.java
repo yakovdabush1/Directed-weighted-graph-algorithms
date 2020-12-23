@@ -1,7 +1,9 @@
 package api;
 
+import api.*;
 import gameClient.util.Point3D;
 import org.junit.jupiter.api.Test;
+
 
 import java.util.ArrayList;
 import java.util.List;

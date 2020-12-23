@@ -2,7 +2,11 @@ package api;
 
 import org.jetbrains.annotations.NotNull;
 
-public class NodeData implements node_data, Comparable<node_data>{
+import java.io.Serializable;
+import java.util.Comparator;
+import java.util.Objects;
+
+public class NodeData implements node_data, Comparator<node_data>, Comparable<node_data>{
 
     private int key, tag;
     private String info;
@@ -13,10 +17,8 @@ public class NodeData implements node_data, Comparable<node_data>{
         this.key = key;
         this.info = "White";
         this.tag = -1;
+        this.w = 0.0;
         this.location = location;
-    }
-
-    public NodeData(node_data n) {
     }
 
     @Override
@@ -65,17 +67,30 @@ public class NodeData implements node_data, Comparable<node_data>{
     }
 
     @Override
-    public int compareTo(@NotNull node_data o) {
+    public int compareTo(node_data o) {
+        Double w1 = this.getWeight();
+        Double w2 = o.getWeight();
 
-        double w1 = this.getWeight();
-        double w2 = o.getWeight();
+        return w1.compareTo(w2);
+    }
+
+    /**
+     * compare 2 nodes
+     * based on their weights
+     * @param o1
+     * @param o2
+     * @return
+     */
+    @Override
+    public int compare(node_data o1, node_data o2) {
+        double w1 = o1.getWeight();
+        double w2 = o2.getWeight();
 
         return Double.compare(w1, w2);
-
     }
 
     @Override
     public String toString() {
-        return "";
+        return "{k: " + getKey() + ", i: " + getInfo() + ", w: " + getWeight() + ", tag: " + getTag() + "}";
     }
 }

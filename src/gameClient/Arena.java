@@ -22,11 +22,13 @@ import java.util.List;
  *
  */
 public class Arena {
+
 	public static final double EPS1 = 0.001, EPS2=EPS1*EPS1, EPS=EPS2;
 	private directed_weighted_graph _gg;
 	private List<CL_Agent> _agents;
 	private List<CL_Pokemon> _pokemons;
 	private List<String> _info;
+
 	private static Point3D MIN = new Point3D(0, 100,0);
 	private static Point3D MAX = new Point3D(0, 100,0);
 
@@ -83,7 +85,9 @@ public class Arena {
 			JSONObject ttt = new JSONObject(aa);
 			JSONArray ags = ttt.getJSONArray("Agents");
 			for(int i=0;i<ags.length();i++) {
+
 				CL_Agent c = new CL_Agent(gg,0);
+
 				c.update(ags.get(i).toString());
 				ans.add(c);
 			}
